@@ -7,14 +7,6 @@ PhoneBook::PhoneBook()
 	contactSize = 0;
 }
 
-PhoneBook::~PhoneBook()
-{
-	for (int i = 0; i < contactSize; i++)
-	{
-		delete contacts[i];
-	}
-}
-
 void	PhoneBook::displayContacts(void)
 {
 	int					i = 0;
@@ -26,28 +18,28 @@ void	PhoneBook::displayContacts(void)
 		if (fields[i].size() > 10)
 			std::cout << fields[i].substr(0, 10);
 		else
-			std::cout << fields[i] << std::string(10 - fields[i].size(), ' ');
+			std::cout << std::string(10 - fields[i].size(), ' ') << fields[i];
 		if (i < 3)
 			std::cout << '|';
 	}
 	std::cout << std::endl;
 	while (i < contactSize)
 	{
-		std::cout << i << std::string(10 - countDigits(i), ' ') << '|';
-		contacts[i]->displayInlineInformations();
+		std::cout << std::string(10 - countDigits(i), ' ') << i << '|';
+		contacts[i].displayInlineInformations();
 		i++;
 	}
 }
 
-void	PhoneBook::addContact(Contact* contact)
+void	PhoneBook::addContact(Contact contact)
 {
-	if (contactSize == 7)
+	if (contactSize == 8)
 	{
 		for (int i = 1; i < 8; i++)
 		{
 			contacts[i - 1] = contacts[i];
 		}
-		contacts[contactSize] = contact;
+		contacts[7] = contact;
 	}
 	else
 	{
@@ -61,7 +53,7 @@ int	PhoneBook::getContactSize(void)
 	return contactSize;
 }
 
-Contact*	PhoneBook::getContactAt(int index)
+Contact	PhoneBook::getContactAt(int index)
 {
 	return contacts[index];
 }

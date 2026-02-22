@@ -14,58 +14,63 @@ int main(void)
 	std::string	darkestSecret;
 	std::string	index;
 	int			i;
-	PhoneBook*	phoneBook = new PhoneBook;
+	PhoneBook	phoneBook;
 
 	do
 	{
 		std::cout << '>';
-		std::getline(std::cin, cmd);
+		if (!std::getline(std::cin, cmd))
+			break ;
 		if (cmd == "ADD")
 		{
-			Contact* contact = new Contact;
+			Contact contact;
 			std::cout << "First Name: ";
-			std::getline(std::cin, firstName);
-			contact->setFirstName(firstName);
+			if (!std::getline(std::cin, firstName))
+				break ;
+			contact.setFirstName(firstName);
 			std::cout << "Last Name: ";
-			std::getline(std::cin, lastName);
-			contact->setLastName(lastName);
+			if (!std::getline(std::cin, lastName))
+				break ;
+			contact.setLastName(lastName);
 			std::cout << "Nickname: ";
-			std::getline(std::cin, nickname);
-			contact->setNickname(nickname);
+			if (!std::getline(std::cin, nickname))
+				break ;
+			contact.setNickname(nickname);
 			std::cout << "Phone number: ";
-			std::getline(std::cin, phoneNumber);
-			contact->setPhoneNumber(phoneNumber);
+			if (!std::getline(std::cin, phoneNumber))
+				break ;
+			contact.setPhoneNumber(phoneNumber);
 			std::cout << "Darkest Secret: ";
-			std::getline(std::cin, darkestSecret);
-			contact->setDarkestSecret(darkestSecret);
+			if (!std::getline(std::cin, darkestSecret))
+				break ;
+			contact.setDarkestSecret(darkestSecret);
 			if (!firstName.size() \
 			|| !lastName.size() \
 			|| !nickname.size() \
 			|| !phoneNumber.size() \
 			|| !darkestSecret.size())
 			{
-				delete contact;
 				std::cout << "Error: One of the fields are empty!" << std::endl;
 				continue ;
 			}
-			phoneBook->addContact(contact);
+			phoneBook.addContact(contact);
 			std::cout << "Contact added in phonebook!" << std::endl;
 		}
 		else if (cmd == "SEARCH")
 		{
-			phoneBook->displayContacts();
+			phoneBook.displayContacts();
 			std::cout << "Select index: ";
-			std::getline(std::cin, index);
+			if (!std::getline(std::cin, index))
+				break ;
 			i = ft_atoi(index.c_str());
-			if (i == -1 || i >= phoneBook->getContactSize())
+			if (i == -1 || i >= phoneBook.getContactSize())
 			{
 				std::cout << "The index provided is invalid." << std::endl;
 				continue ;
 			}
-			Contact* contact = phoneBook->getContactAt(i);
-			contact->displayFullInformations();
+			Contact contact = phoneBook.getContactAt(i);
+			contact.displayFullInformations();
 		}
 	} while (cmd != "EXIT");
-	delete phoneBook;
 	return (0);
 }

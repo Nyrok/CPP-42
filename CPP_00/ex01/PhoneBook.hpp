@@ -7,16 +7,15 @@
 class PhoneBook
 {
 	private:
-		Contact*	contacts[8];
+		Contact		contacts[8];
 		int			contactSize;
-	
+
 	public:
 		PhoneBook();
-		~PhoneBook();
-		void		addContact(Contact* contact);
+		void		addContact(Contact contact);
 		void		displayContacts(void);
 		int			getContactSize(void);
-		Contact*	getContactAt(int index);
+		Contact		getContactAt(int index);
 };
 
 #endif

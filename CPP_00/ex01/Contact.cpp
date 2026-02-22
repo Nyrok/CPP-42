@@ -5,10 +5,10 @@ void	Contact::displayInlineInformations(void)
 	std::string	fields[3] = {firstName, lastName, nickname};
 	for (int i = 0; i < 3; i++)
 	{
-		if (fields[i].size() > 9)
+		if (fields[i].size() > 10)
 			std::cout << fields[i].substr(0, 9) << '.';
 		else
-			std::cout << fields[i] << std::string(10 - fields[i].size(), ' ');
+			std::cout << std::string(10 - fields[i].size(), ' ') << fields[i];
 		if (i < 2)
 			std::cout << '|';
 	}
