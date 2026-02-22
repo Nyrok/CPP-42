@@ -9,7 +9,6 @@ PhoneBook::PhoneBook()
 
 PhoneBook::~PhoneBook()
 {
-	std::cout << "Destructeur appeler" << std::endl;
 	for (int i = 0; i < contactSize; i++)
 	{
 		delete contacts[i];
