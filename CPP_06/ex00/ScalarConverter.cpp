@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cctype>
 #include <climits>
+#include <cmath>
 
 void	ScalarConverter::printChar(double value)
 {
@@ -33,12 +34,8 @@ void	ScalarConverter::printFloat(double value)
 		std::cout << "float: +inff" << std::endl;
 	else if (f == -std::numeric_limits<float>::infinity())
 		std::cout << "float: -inff" << std::endl;
-	else if (f > -1e18f && f < 1e18f && f == static_cast<float>(static_cast<long>(f)))
-	{
+	else if (std::floor(f) == f)
 		std::cout << "float: " << std::fixed << std::setprecision(1) << f << "f" << std::endl;
-		std::cout.unsetf(std::ios::fixed);
-		std::cout.precision(6);
-	}
 	else
 		std::cout << "float: " << f << "f" << std::endl;
 }
@@ -51,12 +48,8 @@ void	ScalarConverter::printDouble(double value)
 		std::cout << "double: +inf" << std::endl;
 	else if (value == -std::numeric_limits<double>::infinity())
 		std::cout << "double: -inf" << std::endl;
-	else if (value > -1e18 && value < 1e18 && value == static_cast<double>(static_cast<long>(value)))
-	{
+	else if (std::floor(value) == value)
 		std::cout << "double: " << std::fixed << std::setprecision(1) << value << std::endl;
-		std::cout.unsetf(std::ios::fixed);
-		std::cout.precision(6);
-	}
 	else
 		std::cout << "double: " << value << std::endl;
 }
