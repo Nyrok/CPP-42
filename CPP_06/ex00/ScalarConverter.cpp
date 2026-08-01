@@ -6,6 +6,37 @@
 #include <climits>
 #include <cmath>
 
+static bool	isCharLiteral(std::string const &literal)
+{
+	if (literal.length() == 1 && !std::isdigit(literal[0]))
+		return (true);
+	return (literal.length() == 3 && literal[0] == '\'' && literal[2] == '\'');
+}
+
+static bool	isIntLiteral(std::string const &literal)
+{
+	char	*end;
+
+	std::strtol(literal.c_str(), &end, 10);
+	return (end != literal.c_str() && *end == '\0');
+}
+
+static bool	isFloatLiteral(std::string const &literal)
+{
+	char	*end;
+
+	std::strtod(literal.c_str(), &end);
+	return (end != literal.c_str() && *end == 'f' && *(end + 1) == '\0');
+}
+
+static bool	isDoubleLiteral(std::string const &literal)
+{
+	char	*end;
+
+	std::strtod(literal.c_str(), &end);
+	return (end != literal.c_str() && *end == '\0');
+}
+
 static void	printChar(double value)
 {
 	if (value != value || value < 0 || value > 127)
@@ -57,29 +88,27 @@ static void	printDouble(double value)
 void	ScalarConverter::convert(std::string const &literal)
 {
 	double	value;
-	char	*end;
 
-	if (literal == "nan" || literal == "nanf")
-		value = std::numeric_limits<double>::quiet_NaN();
-	else if (literal == "inf" || literal == "+inf" || literal == "inff" || literal == "+inff")
-		value = std::numeric_limits<double>::infinity();
-	else if (literal == "-inf" || literal == "-inff")
-		value = -std::numeric_limits<double>::infinity();
-	else if (literal.length() == 1 && !std::isdigit(literal[0]))
-		value = static_cast<double>(literal[0]);
-	else if (literal.length() == 3 && literal[0] == '\'' && literal[2] == '\'')
-		value = static_cast<double>(literal[1]);
+	if (isCharLiteral(literal))
+	{
+		if (literal.length() == 3)
+			value = static_cast<double>(literal[1]);
+		else
+			value = static_cast<double>(literal[0]);
+	}
+	else if (isIntLiteral(literal))
+		value = static_cast<double>(std::strtol(literal.c_str(), NULL, 10));
+	else if (isFloatLiteral(literal))
+		value = static_cast<double>(static_cast<float>(std::strtod(literal.c_str(), NULL)));
+	else if (isDoubleLiteral(literal))
+		value = std::strtod(literal.c_str(), NULL);
 	else
 	{
-		value = std::strtod(literal.c_str(), &end);
-		if (end == literal.c_str() || (*end != '\0' && !(*end == 'f' && *(end + 1) == '\0')))
-		{
-			std::cout << "char: impossible" << std::endl;
-			std::cout << "int: impossible" << std::endl;
-			std::cout << "float: impossible" << std::endl;
-			std::cout << "double: impossible" << std::endl;
-			return ;
-		}
+		std::cout << "char: impossible" << std::endl;
+		std::cout << "int: impossible" << std::endl;
+		std::cout << "float: impossible" << std::endl;
+		std::cout << "double: impossible" << std::endl;
+		return ;
 	}
 	printChar(value);
 	printInt(value);
