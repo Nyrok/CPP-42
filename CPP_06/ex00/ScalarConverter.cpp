@@ -6,6 +6,25 @@
 #include <climits>
 #include <cmath>
 
+ScalarConverter::ScalarConverter(void)
+{
+}
+
+ScalarConverter::ScalarConverter(ScalarConverter const &src)
+{
+	(void)src;
+}
+
+ScalarConverter::~ScalarConverter(void)
+{
+}
+
+ScalarConverter	&ScalarConverter::operator=(ScalarConverter const &src)
+{
+	(void)src;
+	return (*this);
+}
+
 static bool	isPseudoLiteral(std::string const &literal)
 {
 	return (literal == "nan" || literal == "nanf"
