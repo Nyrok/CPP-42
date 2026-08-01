@@ -1,4 +1,4 @@
-NAME	= ex00
+NAME	= convert
 
 CX		= c++
 CXFLAGS	= -Wall -Wextra -Werror -std=c++98
