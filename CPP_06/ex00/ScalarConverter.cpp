@@ -68,10 +68,12 @@ static void	printFloat(double value)
 
 	if (f != f)
 		std::cout << "float: nanf" << std::endl;
-	else if (f == std::numeric_limits<float>::infinity())
+	else if (value == std::numeric_limits<double>::infinity())
 		std::cout << "float: +inff" << std::endl;
-	else if (f == -std::numeric_limits<float>::infinity())
+	else if (value == -std::numeric_limits<double>::infinity())
 		std::cout << "float: -inff" << std::endl;
+	else if (f == std::numeric_limits<float>::infinity() || f == -std::numeric_limits<float>::infinity())
+		std::cout << "float: impossible" << std::endl;
 	else if (std::floor(f) == f)
 		std::cout << "float: " << std::fixed << std::setprecision(1) << f << "f" << std::endl;
 	else
