@@ -6,6 +6,13 @@
 #include <climits>
 #include <cmath>
 
+static bool	isPseudoLiteral(std::string const &literal)
+{
+	return (literal == "nan" || literal == "nanf"
+		|| literal == "+inf" || literal == "+inff"
+		|| literal == "-inf" || literal == "-inff");
+}
+
 static bool	isCharLiteral(std::string const &literal)
 {
 	if (literal.length() == 1 && !std::isdigit(literal[0]))
@@ -89,7 +96,16 @@ void	ScalarConverter::convert(std::string const &literal)
 {
 	double	value;
 
-	if (isCharLiteral(literal))
+	if (isPseudoLiteral(literal))
+	{
+		if (literal[0] == 'n')
+			value = std::numeric_limits<double>::quiet_NaN();
+		else if (literal[0] == '-')
+			value = -std::numeric_limits<double>::infinity();
+		else
+			value = std::numeric_limits<double>::infinity();
+	}
+	else if (isCharLiteral(literal))
 	{
 		if (literal.length() == 3)
 			value = static_cast<double>(literal[1]);
