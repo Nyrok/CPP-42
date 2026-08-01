@@ -6,7 +6,7 @@
 #include <climits>
 #include <cmath>
 
-void	ScalarConverter::printChar(double value)
+static void	printChar(double value)
 {
 	if (value != value || value < 0 || value > 127)
 		std::cout << "char: impossible" << std::endl;
@@ -16,7 +16,7 @@ void	ScalarConverter::printChar(double value)
 		std::cout << "char: '" << static_cast<char>(value) << "'" << std::endl;
 }
 
-void	ScalarConverter::printInt(double value)
+static void	printInt(double value)
 {
 	if (value != value || value < static_cast<double>(INT_MIN) || value > static_cast<double>(INT_MAX))
 		std::cout << "int: impossible" << std::endl;
@@ -24,7 +24,7 @@ void	ScalarConverter::printInt(double value)
 		std::cout << "int: " << static_cast<int>(value) << std::endl;
 }
 
-void	ScalarConverter::printFloat(double value)
+static void	printFloat(double value)
 {
 	float	f = static_cast<float>(value);
 
@@ -40,7 +40,7 @@ void	ScalarConverter::printFloat(double value)
 		std::cout << "float: " << f << "f" << std::endl;
 }
 
-void	ScalarConverter::printDouble(double value)
+static void	printDouble(double value)
 {
 	if (value != value)
 		std::cout << "double: nan" << std::endl;
