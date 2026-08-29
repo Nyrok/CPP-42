@@ -65,6 +65,25 @@ class Array
 		class OutOfBoundsException : public std::exception
 		{
 			public:
+				OutOfBoundsException(void)
+				{
+				}
+
+				OutOfBoundsException(OutOfBoundsException const &src)
+				{
+					(void)src;
+				}
+
+				~OutOfBoundsException(void) throw()
+				{
+				}
+
+				OutOfBoundsException	&operator=(OutOfBoundsException const &src)
+				{
+					(void)src;
+					return (*this);
+				}
+
 				const char	*what(void) const throw()
 				{
 					return ("index is out of bounds");
