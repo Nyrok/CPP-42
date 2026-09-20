@@ -2,6 +2,8 @@
 # define ARRAY_HPP
 
 # include <exception>
+# include <iostream>
+# include <string>
 
 template <typename T>
 class Array
@@ -11,84 +13,32 @@ class Array
 		unsigned int	length;
 
 	public:
-		Array(void) : elements(new T[0]()), length(0)
-		{
-		}
+		Array(void);
+		Array(unsigned int n);
+		Array(Array const &src);
+		~Array(void);
 
-		Array(unsigned int n) : elements(new T[n]()), length(n)
-		{
-		}
+		Array	&operator=(Array const &src);
 
-		Array(Array const &src) : elements(new T[src.length]()), length(src.length)
-		{
-			for (unsigned int i = 0; i < length; i++)
-				elements[i] = src.elements[i];
-		}
-
-		~Array(void)
-		{
-			delete [] elements;
-		}
-
-		Array	&operator=(Array const &src)
-		{
-			if (this != &src)
-			{
-				delete [] elements;
-				elements = new T[src.length]();
-				length = src.length;
-				for (unsigned int i = 0; i < length; i++)
-					elements[i] = src.elements[i];
-			}
-			return (*this);
-		}
-
-		T	&operator[](unsigned int index)
-		{
-			if (index >= length)
-				throw Array::OutOfBoundsException();
-			return (elements[index]);
-		}
-
-		T const	&operator[](unsigned int index) const
-		{
-			if (index >= length)
-				throw Array::OutOfBoundsException();
-			return (elements[index]);
-		}
-
-		unsigned int	size(void) const
-		{
-			return (length);
-		}
+		T				&operator[](unsigned int index);
+		unsigned int	size(void);
 
 		class OutOfBoundsException : public std::exception
 		{
 			public:
-				OutOfBoundsException(void)
-				{
-				}
+				OutOfBoundsException(void);
+				OutOfBoundsException(OutOfBoundsException const &src);
+				~OutOfBoundsException(void) throw();
 
-				OutOfBoundsException(OutOfBoundsException const &src)
-				{
-					(void)src;
-				}
+				OutOfBoundsException	&operator=(OutOfBoundsException const &src);
 
-				~OutOfBoundsException(void) throw()
-				{
-				}
-
-				OutOfBoundsException	&operator=(OutOfBoundsException const &src)
-				{
-					(void)src;
-					return (*this);
-				}
-
-				const char	*what(void) const throw()
-				{
-					return ("index is out of bounds");
-				}
+				char const	*what(void) const throw();
 		};
 };
+
+template <typename T>
+std::ostream	&operator<<(std::ostream &o, Array<T> &array);
+
+# include "Array.cpp"
 
 #endif
