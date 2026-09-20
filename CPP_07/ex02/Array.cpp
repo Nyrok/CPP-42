@@ -49,7 +49,15 @@ T	&Array<T>::operator[](unsigned int index)
 }
 
 template <typename T>
-unsigned int	Array<T>::size(void)
+T const	&Array<T>::operator[](unsigned int index) const
+{
+	if (index >= length)
+		throw typename Array<T>::OutOfBoundsException();
+	return (elements[index]);
+}
+
+template <typename T>
+unsigned int	Array<T>::size(void) const
 {
 	return (length);
 }
@@ -84,7 +92,7 @@ char const	*Array<T>::OutOfBoundsException::what(void) const throw()
 }
 
 template <typename T>
-std::ostream	&operator<<(std::ostream &o, Array<T> &array)
+std::ostream	&operator<<(std::ostream &o, Array<T> const &array)
 {
 	o << "[";
 	for (unsigned int i = 0; i < array.size(); i++)

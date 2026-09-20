@@ -21,7 +21,8 @@ class Array
 		Array	&operator=(Array const &src);
 
 		T				&operator[](unsigned int index);
-		unsigned int	size(void);
+		T const			&operator[](unsigned int index) const;
+		unsigned int	size(void) const;
 
 		class OutOfBoundsException : public std::exception
 		{
@@ -37,7 +38,7 @@ class Array
 };
 
 template <typename T>
-std::ostream	&operator<<(std::ostream &o, Array<T> &array);
+std::ostream	&operator<<(std::ostream &o, Array<T> const &array);
 
 # include "Array.cpp"
 
