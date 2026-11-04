@@ -25,7 +25,6 @@ BitcoinExchange	&BitcoinExchange::operator=(BitcoinExchange const &src)
 	return (*this);
 }
 
-/* "YYYY-MM-DD" and the day must exist in that month (leap years included) */
 bool	BitcoinExchange::isValidDate(std::string const &date)
 {
 	if (date.size() != 10 || date[4] != '-' || date[7] != '-')
@@ -48,7 +47,6 @@ bool	BitcoinExchange::isValidDate(std::string const &date)
 	return (day >= 1 && day <= daysInMonth[month - 1]);
 }
 
-/* digits, optionally followed by '.' and at least one digit: "3", "1.2", "47115.93" */
 bool	BitcoinExchange::isValidNumber(std::string const &str)
 {
 	size_t	i = 0;
@@ -69,7 +67,6 @@ bool	BitcoinExchange::isValidNumber(std::string const &str)
 	return (i == str.size());
 }
 
-/* one "date,exchange_rate" line of data.csv */
 void	BitcoinExchange::addRate(std::string const &line)
 {
 	size_t	comma = line.find(',');
@@ -96,7 +93,6 @@ void	BitcoinExchange::loadDatabase(std::string const &filename)
 		throw std::runtime_error("database is empty.");
 }
 
-/* one "date | value" line of the input file */
 void	BitcoinExchange::processLine(std::string const &line) const
 {
 	size_t	separator = line.find(" | ");
@@ -134,7 +130,6 @@ void	BitcoinExchange::processLine(std::string const &line) const
 		return ;
 	}
 
-	/* first date strictly after `date`, then one step back = same date or closest lower one */
 	std::map<std::string, double>::const_iterator	it = rates.upper_bound(date);
 
 	if (it == rates.begin())
@@ -143,7 +138,6 @@ void	BitcoinExchange::processLine(std::string const &line) const
 		return ;
 	}
 	--it;
-	/* 10 significant digits: big results keep their decimals and are not shown as 4.71159e+07 */
 	std::cout << std::setprecision(10)
 		<< date << " => " << value << " = " << value * it->second << std::endl;
 }

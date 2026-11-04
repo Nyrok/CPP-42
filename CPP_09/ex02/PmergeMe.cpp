@@ -7,20 +7,6 @@
 #include <sstream>
 #include <stdexcept>
 
-/*
-** Ford-Johnson (merge-insertion), same steps for both containers:
-**  1. make pairs, the larger element of each pair is a "winner" (a), the smaller is its partner (b)
-**  2. sort the winners recursively with the same algorithm
-**  3. main chain = b1 a1 a2 ... am (b1 is smaller than a1, so it goes first for free)
-**  4. insert b2 b3 ... (and the leftover element if the size is odd) by binary search,
-**     in the Jacobsthal order: b3 b2, b5 b4, b11 ... b6, b21 ... b12, ...
-**     bi is smaller than ai, so its search stops before ai: with this order every
-**     search is done on at most 2^k - 1 elements, which costs at most k comparisons.
-**
-** The algorithm sorts indexes in `vec` / `deq` (ids) instead of the values themselves:
-** that way every winner remembers its own partner, even when some values are equal.
-*/
-
 static double	elapsedMicroseconds(std::clock_t start)
 {
 	return (static_cast<double>(std::clock() - start) * 1000000.0 / CLOCKS_PER_SEC);
@@ -48,7 +34,6 @@ PmergeMe	&PmergeMe::operator=(PmergeMe const &src)
 	return (*this);
 }
 
-/* only digits, between 1 and INT_MAX */
 int	PmergeMe::parseNumber(std::string const &token)
 {
 	long	value = 0;
@@ -65,10 +50,6 @@ int	PmergeMe::parseNumber(std::string const &token)
 		throw std::invalid_argument("not a positive integer: " + token);
 	return (static_cast<int>(value));
 }
-
-/* ========================================================================== */
-/*                                std::vector                                 */
-/* ========================================================================== */
 
 void	PmergeMe::fillVector(int argc, char **argv)
 {
@@ -99,7 +80,6 @@ void	PmergeMe::sortVector(void)
 	vec = sorted;
 }
 
-/* binary search in mainChain[0, bound), then insert: the classic "binary insertion" */
 void	PmergeMe::binaryInsertVector(std::vector<size_t> &mainChain, size_t id, size_t bound)
 {
 	size_t	low = 0;
@@ -122,7 +102,6 @@ void	PmergeMe::mergeInsertVector(std::vector<size_t> &chain)
 	if (chain.size() < 2)
 		return ;
 
-	/* 1. pairs: partner[winner] = the smaller element it was paired with */
 	std::vector<size_t>	winners;
 	std::vector<size_t>	partner(vec.size());
 
@@ -137,16 +116,13 @@ void	PmergeMe::mergeInsertVector(std::vector<size_t> &chain)
 		partner[larger] = smaller;
 	}
 
-	/* 2. recursion on the winners */
 	mergeInsertVector(winners);
 
-	/* 3. main chain: b1 a1 a2 ... am */
 	std::vector<size_t>	mainChain;
 
 	mainChain.push_back(partner[winners[0]]);
 	mainChain.insert(mainChain.end(), winners.begin(), winners.end());
 
-	/* 4. insert b2 ... bk in Jacobsthal order (bk is the leftover element when the size is odd) */
 	size_t	pendCount = winners.size() + chain.size() % 2;
 	size_t	previousJacobsthal = 1;
 	size_t	currentJacobsthal = 3;
@@ -182,10 +158,6 @@ void	PmergeMe::printVector(std::string const &label) const
 		std::cout << " " << vec[i];
 	std::cout << std::endl;
 }
-
-/* ========================================================================== */
-/*                                 std::deque                                 */
-/* ========================================================================== */
 
 void	PmergeMe::fillDeque(int argc, char **argv)
 {
@@ -238,7 +210,6 @@ void	PmergeMe::mergeInsertDeque(std::deque<size_t> &chain)
 	if (chain.size() < 2)
 		return ;
 
-	/* 1. pairs: partner[winner] = the smaller element it was paired with */
 	std::deque<size_t>	winners;
 	std::deque<size_t>	partner(deq.size());
 
@@ -253,16 +224,13 @@ void	PmergeMe::mergeInsertDeque(std::deque<size_t> &chain)
 		partner[larger] = smaller;
 	}
 
-	/* 2. recursion on the winners */
 	mergeInsertDeque(winners);
 
-	/* 3. main chain: b1 a1 a2 ... am */
 	std::deque<size_t>	mainChain;
 
 	mainChain.push_back(partner[winners[0]]);
 	mainChain.insert(mainChain.end(), winners.begin(), winners.end());
 
-	/* 4. insert b2 ... bk in Jacobsthal order (bk is the leftover element when the size is odd) */
 	size_t	pendCount = winners.size() + chain.size() % 2;
 	size_t	previousJacobsthal = 1;
 	size_t	currentJacobsthal = 3;
@@ -291,15 +259,12 @@ void	PmergeMe::mergeInsertDeque(std::deque<size_t> &chain)
 	chain = mainChain;
 }
 
-/* ========================================================================== */
-
 void	PmergeMe::run(int argc, char **argv)
 {
 	std::clock_t	start;
 	double			vectorTime;
 	double			dequeTime;
 
-	/* the time covers the data management (parsing into the container) and the sort */
 	start = std::clock();
 	fillVector(argc, argv);
 	vectorTime = elapsedMicroseconds(start);

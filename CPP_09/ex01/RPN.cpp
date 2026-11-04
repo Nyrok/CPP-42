@@ -23,7 +23,6 @@ RPN	&RPN::operator=(RPN const &src)
 	return (*this);
 }
 
-/* a single digit: numbers given as input are always less than 10 */
 bool	RPN::isOperand(std::string const &token)
 {
 	return (token.size() == 1 && std::isdigit(static_cast<unsigned char>(token[0])));
@@ -34,7 +33,6 @@ bool	RPN::isOperator(std::string const &token)
 	return (token == "+" || token == "-" || token == "*" || token == "/");
 }
 
-/* computed on a long so an int overflow (or INT_MIN / -1) is detected instead of being undefined */
 int	RPN::applyOperator(char op, int left, int right)
 {
 	long	result;
@@ -72,7 +70,6 @@ int	RPN::evaluate(std::string const &expression)
 			if (operands.size() < 2)
 				throw std::runtime_error("not enough operands for '" + token + "'");
 
-			/* the top of the stack is the right operand: "7 2 -" is 7 - 2 */
 			int	right = operands.top();
 
 			operands.pop();
